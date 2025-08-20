@@ -1,65 +1,45 @@
 import turtle
-import random
+import colorsys
 
 # --- Setup the Screen and Turtle ---
 screen = turtle.Screen()
 screen.bgcolor("black")
+screen.title("Cosmic Sunburst")
 
 pen = turtle.Turtle()
-pen.speed(0)          # Set the drawing speed to the maximum
-pen.hideturtle()      # Hide the turtle for a clean look
-pen.setheading(90)    # Start the turtle pointing straight up
-pen.color("white")
+pen.speed(0)      # Maximum drawing speed
+pen.hideturtle()  # Hide the turtle arrow for a clean final image
 
-# --- The Recursive Function to Draw the Tree ---
-def draw_tree(branch_len, pen):
-    """
-    Recursively draws a branch of the fractal tree.
-    """
-    if branch_len > 8:
-        # --- Make branches thinner and greener as they get smaller ---
-        if branch_len < 30:
-            pen.pensize(2)
-            pen.color("#2ECC71") # Green for leaves/twigs
-        elif branch_len < 60:
-            pen.pensize(4)
-            pen.color("#AF601A") # Medium brown for smaller branches
-        else:
-            pen.pensize(7)
-            pen.color("#A0522D") # Dark brown for the trunk
+# --- Initial variables ---
+hue = 0.0         # Starting hue for the color cycle
+num_lines = 150   # Total number of lines to draw in the sunburst
 
-        # Draw the main branch
-        pen.forward(branch_len)
-
-        # Save the current position and angle
-        current_pos = pen.pos()
-        current_heading = pen.heading()
-        
-        # --- Create the right sub-branch ---
-        # Introduce some randomness for a more natural look
-        angle = random.randint(15, 30)
-        pen.right(angle)
-        draw_tree(branch_len - random.randint(12, 18), pen)
-
-        # --- Create the left sub-branch ---
-        # Restore position and angle to branch from the same spot
-        pen.setpos(current_pos)
-        pen.setheading(current_heading)
-        pen.left(angle)
-        draw_tree(branch_len - random.randint(12, 18), pen)
-        
-        # --- Return to the base of the branch to allow parent to continue ---
-        pen.setpos(current_pos)
-        pen.setheading(current_heading)
-
-# --- Start the Drawing ---
-# Position the turtle at the bottom center
+# --- Main loop to draw the pattern ---
 pen.penup()
-pen.goto(0, -300)
+pen.goto(0, 0)    # Start at the center of the screen
 pen.pendown()
 
-# Call the function to draw the tree with an initial branch length
-draw_tree(100, pen)
+for i in range(num_lines):
+    # Convert HSV color to RGB and set the pen color
+    # Hue cycles, while Saturation and Value are kept at max for vibrancy
+    rgb_color = colorsys.hsv_to_rgb(hue, 1.0, 1.0)
+    pen.pencolor(rgb_color)
+
+    # Move the turtle forward to draw a line
+    # The length of the line is determined by the loop variable
+    pen.forward(i * 2.5)
+
+    # --- Move back to the center without drawing ---
+    pen.penup()
+    pen.backward(i * 2.5) # Go back the same distance
+    pen.pendown()
+
+    # Turn the turtle slightly for the next line
+    # Dividing 360 degrees by the number of lines gives an even spacing
+    pen.left(360 / num_lines)
+
+    # Increment the hue to shift the color for the next line
+    hue += 1 / num_lines
 
 # Keep the window open
 turtle.done()
