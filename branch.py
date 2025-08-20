@@ -1,45 +1,38 @@
 import turtle
-import colorsys
 
 # --- Setup the Screen and Turtle ---
 screen = turtle.Screen()
-screen.bgcolor("black")
-screen.title("Cosmic Sunburst")
+screen.bgcolor("#101010")  # Use a very dark grey for a sleek look
+screen.title("Hypnotic Tunnel")
 
 pen = turtle.Turtle()
-pen.speed(0)      # Maximum drawing speed
-pen.hideturtle()  # Hide the turtle arrow for a clean final image
+pen.speed(0)        # Maximum drawing speed
+pen.hideturtle()    # Hide the turtle for a clean look
+pen.width(2)        # Set a nice, visible line width
 
-# --- Initial variables ---
-hue = 0.0         # Starting hue for the color cycle
-num_lines = 150   # Total number of lines to draw in the sunburst
+# --- Define a list of colors for a cool, modern palette ---
+colors = ["#00FFFF", "#48D1CC", "#008B8B", "#20B2AA", "#4682B4", "#5F9EA0"]
+#          Cyan,    MediumTurquoise, DarkCyan, LightSeaGreen, SteelBlue, CadetBlue
 
-# --- Main loop to draw the pattern ---
-pen.penup()
-pen.goto(0, 0)    # Start at the center of the screen
-pen.pendown()
+# --- Function to draw a single square ---
+def draw_square(size):
+    """Draws a square of a given size."""
+    for _ in range(4):
+        pen.forward(size)
+        pen.left(90)
 
-for i in range(num_lines):
-    # Convert HSV color to RGB and set the pen color
-    # Hue cycles, while Saturation and Value are kept at max for vibrancy
-    rgb_color = colorsys.hsv_to_rgb(hue, 1.0, 1.0)
-    pen.pencolor(rgb_color)
+# --- Main loop to draw the nested, rotating squares ---
+initial_size = 400  # Starting size of the largest square
 
-    # Move the turtle forward to draw a line
-    # The length of the line is determined by the loop variable
-    pen.forward(i * 2.5)
+for i in range(120):
+    # Set the color for the current square, cycling through the palette
+    pen.pencolor(colors[i % len(colors)])
 
-    # --- Move back to the center without drawing ---
-    pen.penup()
-    pen.backward(i * 2.5) # Go back the same distance
-    pen.pendown()
+    # Draw the square with its current size
+    draw_square(initial_size - i * 3)
 
-    # Turn the turtle slightly for the next line
-    # Dividing 360 degrees by the number of lines gives an even spacing
-    pen.left(360 / num_lines)
-
-    # Increment the hue to shift the color for the next line
-    hue += 1 / num_lines
+    # Rotate the turtle slightly for the next, smaller square
+    pen.left(5)
 
 # Keep the window open
 turtle.done()
