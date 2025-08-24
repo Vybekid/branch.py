@@ -1,5 +1,5 @@
-import turtle
-import itertools
+import turtle 
+import itertools 
 
 screen = turtle.Screen()
 screen.bgcolor("#1FFA07")
@@ -11,9 +11,11 @@ pen.pensize(4)
 
 colors = itertools.cycle(["black", "yellow", "red", "light blue", "purple"])
 
-for i in range(150):
+for i in range(150): 
     pen.pencolor(next(colors))
-    pen.forward(i * 2.7)
+    pen.forward(i * 2.6)
     pen.right(145)
 
 turtle.done()
+
+
